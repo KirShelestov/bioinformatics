@@ -1,0 +1,4 @@
+=== Hello World Pipeline ===
+Hello, Snakemake World!
+Hello, Snakemake World!
+=== Pipeline finished! ===

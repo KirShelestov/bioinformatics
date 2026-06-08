@@ -1,0 +1,6 @@
+# config.yaml — настройки пайплайна
+sample: "SRR2584863"
+reference: "ref/ecoli_k12.fa"
+reference_url: "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/005/845/GCF_000005845.2_ASM584v2/GCF_000005845.2_ASM584v2_genomic.fna.gz"
+threads: 4
+mapped_threshold: 90

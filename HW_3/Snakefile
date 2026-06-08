@@ -1,0 +1,187 @@
+# =============================================================================
+# Snakefile — пайплайн получения генетических вариантов
+# Домашнее задание 3, НГУ 2026
+#
+# Запуск:
+#   snakemake --cores 4
+#   snakemake --dag | dot -Tpng > dag.png   # визуализация
+# =============================================================================
+
+configfile: "config.yaml"
+
+SAMPLE    = config["sample"]
+REF       = config["reference"]
+REF_URL   = config["reference_url"]
+THREADS   = config["threads"]
+THRESHOLD = config["mapped_threshold"]
+
+# --------------- Финальные цели ---------------------------------------------
+rule all:
+    input:
+        f"results/{SAMPLE}.vcf",
+        f"results/fastqc_{SAMPLE}/{SAMPLE}_1_fastqc_QC-report.html",
+        "results/dag.png",
+
+# --------------- Скачивание ридов с NCBI SRA ---------------------------------
+rule download_reads:
+    output:
+        r1 = f"data/{SAMPLE}_1.fastq.gz",
+        r2 = f"data/{SAMPLE}_2.fastq.gz",
+    log:
+        f"logs/download_{SAMPLE}.log"
+    shell:
+        """
+        prefetch {SAMPLE} --output-directory data/ 2>{log}
+        fasterq-dump data/{SAMPLE}/{SAMPLE}.sra \
+            --outdir data/ --threads {THREADS} --split-files 2>>{log}
+        gzip data/{SAMPLE}_1.fastq data/{SAMPLE}_2.fastq 2>>{log}
+        """
+
+# --------------- FastQC ------------------------------------------------------
+rule fastqc:
+    input:
+        r1 = f"data/{SAMPLE}_1.fastq.gz",
+        r2 = f"data/{SAMPLE}_2.fastq.gz",
+    output:
+        html1 = f"results/fastqc_{SAMPLE}/{SAMPLE}_1_fastqc_QC-report.html",
+        html2 = f"results/fastqc_{SAMPLE}/{SAMPLE}_2_fastqc_QC-report.html",
+    log:
+        f"logs/fastqc_{SAMPLE}.log"
+    params:
+        outdir = f"results/fastqc_{SAMPLE}"
+    threads: THREADS
+    shell:
+        """
+        mkdir -p {params.outdir}
+        fastqc {input.r1} {input.r2} \
+            --outdir {params.outdir} \
+            --threads {threads} 2>{log}
+        # Переименовываем в *_QC-report.html
+        for f in {params.outdir}/*.html; do
+            mv "$f" "${{f%.html}}_QC-report.html"
+        done
+        """
+
+# --------------- Скачивание референса с NCBI ---------------------------------
+rule download_reference:
+    output:
+        REF
+    log:
+        "logs/download_reference.log"
+    params:
+        url = REF_URL
+    shell:
+        """
+        wget -q {params.url} -O {output}.gz 2>{log}
+        gunzip -f {output}.gz 2>>{log}
+        """
+
+# --------------- Индексирование референса ------------------------------------
+rule bwa_index:
+    input:
+        REF
+    output:
+        multiext(REF, ".amb", ".ann", ".bwt", ".pac", ".sa")
+    log:
+        "logs/bwa_index.log"
+    shell:
+        "bwa index {input} 2>{log}"
+
+# --------------- Выравнивание ------------------------------------------------
+rule bwa_mem:
+    input:
+        ref   = REF,
+        index = multiext(REF, ".amb", ".ann", ".bwt", ".pac", ".sa"),
+        r1    = f"data/{SAMPLE}_1.fastq.gz",
+        r2    = f"data/{SAMPLE}_2.fastq.gz",
+    output:
+        sam = f"results/{SAMPLE}.sam"
+    log:
+        f"logs/bwa_mem_{SAMPLE}.log"
+    threads: THREADS
+    shell:
+        "bwa mem -t {threads} {input.ref} {input.r1} {input.r2} > {output.sam} 2>{log}"
+
+# --------------- SAM -> BAM --------------------------------------------------
+rule samtools_view:
+    input:
+        f"results/{SAMPLE}.sam"
+    output:
+        bam = f"results/{SAMPLE}.bam",
+        bai = f"results/{SAMPLE}.bam.bai",
+    log:
+        f"logs/samtools_view_{SAMPLE}.log"
+    threads: THREADS
+    shell:
+        """
+        samtools view -bS -@ {threads} {input} \
+            | samtools sort -@ {threads} -o {output.bam} 2>{log}
+        samtools index {output.bam} 2>>{log}
+        """
+
+# --------------- samtools flagstat -------------------------------------------
+rule flagstat:
+    input:
+        f"results/{SAMPLE}.bam"
+    output:
+        f"results/{SAMPLE}.flagstat.txt"
+    log:
+        f"logs/flagstat_{SAMPLE}.log"
+    shell:
+        "samtools flagstat {input} > {output} 2>{log}"
+
+# --------------- Проверка качества картирования ------------------------------
+rule check_mapping:
+    input:
+        flagstat = f"results/{SAMPLE}.flagstat.txt",
+        script   = "scripts/parse_flagstat.py",
+    output:
+        status = f"results/{SAMPLE}.mapping_status.txt"
+    params:
+        threshold = THRESHOLD
+    shell:
+        """
+        python3 {input.script} {input.flagstat} --threshold {params.threshold} \
+            | tee {output.status}
+        # Завершить с ошибкой если not OK (остановит пайплайн)
+        grep -q "✓ Mapping quality: OK" {output.status} || \
+            (echo "not OK — пайплайн остановлен" && exit 1)
+        """
+
+# --------------- Сортировка BAM ----------------------------------------------
+rule samtools_sort:
+    input:
+        bam    = f"results/{SAMPLE}.bam",
+        status = f"results/{SAMPLE}.mapping_status.txt",   # зависимость от check_mapping
+    output:
+        bam = f"results/{SAMPLE}.sorted.bam",
+        bai = f"results/{SAMPLE}.sorted.bam.bai",
+    log:
+        f"logs/sort_{SAMPLE}.log"
+    threads: THREADS
+    shell:
+        """
+        samtools sort -@ {threads} {input.bam} -o {output.bam} 2>{log}
+        samtools index {output.bam} 2>>{log}
+        """
+
+# --------------- FreeBayes ---------------------------------------------------
+rule freebayes:
+    input:
+        ref = REF,
+        bam = f"results/{SAMPLE}.sorted.bam",
+        bai = f"results/{SAMPLE}.sorted.bam.bai",
+    output:
+        f"results/{SAMPLE}.vcf"
+    log:
+        f"logs/freebayes_{SAMPLE}.log"
+    shell:
+        "freebayes -f {input.ref} {input.bam} > {output} 2>{log}"
+
+# --------------- Визуализация DAG -------------------------------------------
+rule dag_png:
+    output:
+        "results/dag.png"
+    shell:
+        # --forceall, чтобы в граф попали все шаги (а не только незавершённые)
+        "snakemake --forceall --rulegraph 2>/dev/null | dot -Tpng > {output}"

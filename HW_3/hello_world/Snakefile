@@ -1,0 +1,31 @@
+rule all:
+    input:
+        "results/goodbye.txt"
+
+rule hello:
+    output:
+        "results/hello.txt"
+    shell:
+        'echo "Hello, Snakemake World!" > {output}'
+
+rule world:
+    input:
+        "results/hello.txt"
+    output:
+        "results/world.txt"
+    shell:
+        'cat {input} > {output}'
+
+rule goodbye:
+    input:
+        "results/hello.txt",
+        "results/world.txt",
+    output:
+        "results/goodbye.txt"
+    shell:
+        """
+        echo "=== Hello World Pipeline ===" > {output}
+        cat {input} >> {output}
+        echo "=== Pipeline finished! ===" >> {output}
+        cat {output}
+        """

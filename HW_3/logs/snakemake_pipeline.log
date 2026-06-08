@@ -1,0 +1,268 @@
+Assuming unrestricted shared filesystem usage.
+host: kirill-MaiBook-M
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Job stats:
+job               count
+--------------  -------
+dag_png               1
+download_reads        1
+fastqc                1
+all                   1
+total                 4
+
+Select jobs to execute...
+Execute 2 jobs...
+
+[Mon Jun  8 20:22:42 2026]
+localrule dag_png:
+    output: results/dag.png
+    jobid: 3
+    reason: Forced execution
+    resources: tmpdir=/tmp
+Shell command: snakemake --forceall --rulegraph 2>/dev/null | dot -Tpng > results/dag.png
+
+[Mon Jun  8 20:22:42 2026]
+localrule download_reads:
+    output: data/SRR2584863_1.fastq.gz, data/SRR2584863_2.fastq.gz
+    log: logs/download_SRR2584863.log
+    jobid: 2
+    reason: Forced execution
+    resources: tmpdir=/tmp
+Shell command: 
+        prefetch SRR2584863 --output-directory data/ 2>logs/download_SRR2584863.log
+        fasterq-dump data/SRR2584863/SRR2584863.sra             --outdir data/ --threads 4 --split-files 2>>logs/download_SRR2584863.log
+        gzip data/SRR2584863_1.fastq data/SRR2584863_2.fastq 2>>logs/download_SRR2584863.log
+        
+2026-06-08T13:22:42 prefetch.3.4.1: 1) Resolving 'SRR2584863'...
+[Mon Jun  8 20:22:43 2026]
+Finished jobid: 3 (Rule: dag_png)
+1 of 4 steps (25%) done
+2026-06-08T13:22:44 prefetch.3.4.1: Current preference is set to retrieve SRA Normalized Format files with full base quality scores
+2026-06-08T13:22:45 prefetch.3.4.1: 1) Downloading 'SRR2584863'...
+2026-06-08T13:22:45 prefetch.3.4.1:  SRA Normalized Format file is being retrieved
+2026-06-08T13:22:45 prefetch.3.4.1:  Downloading via HTTPS...
+2026-06-08T13:25:48 prefetch.3.4.1:  HTTPS download succeed
+2026-06-08T13:25:49 prefetch.3.4.1:  'SRR2584863' is valid: 302057279 bytes were streamed from 302045753
+2026-06-08T13:25:49 prefetch.3.4.1: 1) 'SRR2584863' was downloaded successfully
+[Mon Jun  8 20:27:43 2026]
+Finished jobid: 2 (Rule: download_reads)
+2 of 4 steps (50%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Jun  8 20:27:43 2026]
+localrule fastqc:
+    input: data/SRR2584863_1.fastq.gz, data/SRR2584863_2.fastq.gz
+    output: results/fastqc_SRR2584863/SRR2584863_1_fastqc_QC-report.html, results/fastqc_SRR2584863/SRR2584863_2_fastqc_QC-report.html
+    log: logs/fastqc_SRR2584863.log
+    jobid: 1
+    reason: Forced execution
+    threads: 4
+    resources: tmpdir=/tmp
+Shell command: 
+        mkdir -p results/fastqc_SRR2584863
+        fastqc data/SRR2584863_1.fastq.gz data/SRR2584863_2.fastq.gz             --outdir results/fastqc_SRR2584863             --threads 4 2>logs/fastqc_SRR2584863.log
+        # Переименовываем в *_QC-report.html
+        for f in results/fastqc_SRR2584863/*.html; do
+            mv "$f" "${f%.html}_QC-report.html"
+        done
+        
+application/gzip
+application/gzip
+Analysis complete for SRR2584863_1.fastq.gz
+Analysis complete for SRR2584863_2.fastq.gz
+[Mon Jun  8 20:27:55 2026]
+Finished jobid: 1 (Rule: fastqc)
+3 of 4 steps (75%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Jun  8 20:27:56 2026]
+localrule all:
+    input: results/SRR2584863.vcf, results/fastqc_SRR2584863/SRR2584863_1_fastqc_QC-report.html, results/dag.png
+    jobid: 0
+    reason: Forced execution
+    resources: tmpdir=/tmp
+Shell command: None
+[Mon Jun  8 20:27:56 2026]
+Finished jobid: 0 (Rule: all)
+4 of 4 steps (100%) done
+Complete log(s): /home/kirill/Desktop/BIOINFA/HW_3/.snakemake/log/2026-06-08T202241.878043.snakemake.log
+Assuming unrestricted shared filesystem usage.
+host: kirill-MaiBook-M
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Job stats:
+job              count
+-------------  -------
+bwa_index            1
+bwa_mem              1
+samtools_view        1
+flagstat             1
+check_mapping        1
+samtools_sort        1
+freebayes            1
+all                  1
+total                8
+
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Jun  8 20:31:51 2026]
+localrule bwa_index:
+    input: ref/ecoli_k12.fa
+    output: ref/ecoli_k12.fa.amb, ref/ecoli_k12.fa.ann, ref/ecoli_k12.fa.bwt, ref/ecoli_k12.fa.pac, ref/ecoli_k12.fa.sa
+    log: logs/bwa_index.log
+    jobid: 5
+    reason: Missing output files: ref/ecoli_k12.fa.bwt, ref/ecoli_k12.fa.amb, ref/ecoli_k12.fa.sa, ref/ecoli_k12.fa.pac, ref/ecoli_k12.fa.ann
+    resources: tmpdir=/tmp
+Shell command: bwa index ref/ecoli_k12.fa 2>logs/bwa_index.log
+[Mon Jun  8 20:31:54 2026]
+Finished jobid: 5 (Rule: bwa_index)
+1 of 8 steps (12%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Jun  8 20:31:54 2026]
+localrule bwa_mem:
+    input: ref/ecoli_k12.fa, ref/ecoli_k12.fa.amb, ref/ecoli_k12.fa.ann, ref/ecoli_k12.fa.bwt, ref/ecoli_k12.fa.pac, ref/ecoli_k12.fa.sa, data/SRR2584863_1.fastq.gz, data/SRR2584863_2.fastq.gz
+    output: results/SRR2584863.sam
+    log: logs/bwa_mem_SRR2584863.log
+    jobid: 4
+    reason: Missing output files: results/SRR2584863.sam; Input files updated by another job: ref/ecoli_k12.fa.bwt, ref/ecoli_k12.fa.sa, ref/ecoli_k12.fa.amb, ref/ecoli_k12.fa.pac, ref/ecoli_k12.fa.ann
+    threads: 4
+    resources: tmpdir=/tmp
+Shell command: bwa mem -t 4 ref/ecoli_k12.fa data/SRR2584863_1.fastq.gz data/SRR2584863_2.fastq.gz > results/SRR2584863.sam 2>logs/bwa_mem_SRR2584863.log
+[Mon Jun  8 20:32:56 2026]
+Finished jobid: 4 (Rule: bwa_mem)
+2 of 8 steps (25%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Jun  8 20:32:56 2026]
+localrule samtools_view:
+    input: results/SRR2584863.sam
+    output: results/SRR2584863.bam, results/SRR2584863.bam.bai
+    log: logs/samtools_view_SRR2584863.log
+    jobid: 3
+    reason: Missing output files: results/SRR2584863.bam; Input files updated by another job: results/SRR2584863.sam
+    threads: 4
+    resources: tmpdir=/tmp
+Shell command: 
+        samtools view -bS -@ 4 results/SRR2584863.sam             | samtools sort -@ 4 -o results/SRR2584863.bam 2>logs/samtools_view_SRR2584863.log
+        samtools index results/SRR2584863.bam 2>>logs/samtools_view_SRR2584863.log
+        
+[Mon Jun  8 20:33:15 2026]
+Finished jobid: 3 (Rule: samtools_view)
+3 of 8 steps (38%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Jun  8 20:33:15 2026]
+localrule flagstat:
+    input: results/SRR2584863.bam
+    output: results/SRR2584863.flagstat.txt
+    log: logs/flagstat_SRR2584863.log
+    jobid: 8
+    reason: Missing output files: results/SRR2584863.flagstat.txt; Input files updated by another job: results/SRR2584863.bam
+    resources: tmpdir=/tmp
+Shell command: samtools flagstat results/SRR2584863.bam > results/SRR2584863.flagstat.txt 2>logs/flagstat_SRR2584863.log
+[Mon Jun  8 20:33:17 2026]
+Finished jobid: 8 (Rule: flagstat)
+4 of 8 steps (50%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Jun  8 20:33:17 2026]
+localrule check_mapping:
+    input: results/SRR2584863.flagstat.txt, scripts/parse_flagstat.py
+    output: results/SRR2584863.mapping_status.txt
+    jobid: 7
+    reason: Missing output files: results/SRR2584863.mapping_status.txt; Input files updated by another job: results/SRR2584863.flagstat.txt
+    resources: tmpdir=/tmp
+Shell command: 
+        python3 scripts/parse_flagstat.py results/SRR2584863.flagstat.txt --threshold 90             | tee results/SRR2584863.mapping_status.txt
+        # Завершить с ошибкой если not OK (остановит пайплайн)
+        grep -q "✓ Mapping quality: OK" results/SRR2584863.mapping_status.txt ||             (echo "not OK — пайплайн остановлен" && exit 1)
+        
+=======================================================
+  samtools flagstat — отчёт
+=======================================================
+     3131061  in total
+     3106518  primary
+           0  secondary
+       24543  supplementary
+           0  duplicates
+           0  primary duplicates
+     2939902  mapped  (93.89%)
+     2915359  primary mapped  (93.85%)
+     3106518  paired in sequencing
+     1553259  read1
+     1553259  read2
+     2796762  properly paired  (90.03%)
+     2874714  with itself and mate mapped
+       40645  singletons  (1.31%)
+           0  with mate mapped to a different chr
+=======================================================
+
+  % картированных ридов: 93.89%
+  Порог:                 90.0%
+
+  ✓ Mapping quality: OK
+
+[Mon Jun  8 20:33:17 2026]
+Finished jobid: 7 (Rule: check_mapping)
+5 of 8 steps (62%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Jun  8 20:33:17 2026]
+localrule samtools_sort:
+    input: results/SRR2584863.bam, results/SRR2584863.mapping_status.txt
+    output: results/SRR2584863.sorted.bam, results/SRR2584863.sorted.bam.bai
+    log: logs/sort_SRR2584863.log
+    jobid: 2
+    reason: Missing output files: results/SRR2584863.sorted.bam, results/SRR2584863.sorted.bam.bai; Input files updated by another job: results/SRR2584863.mapping_status.txt, results/SRR2584863.bam
+    threads: 4
+    resources: tmpdir=/tmp
+Shell command: 
+        samtools sort -@ 4 results/SRR2584863.bam -o results/SRR2584863.sorted.bam 2>logs/sort_SRR2584863.log
+        samtools index results/SRR2584863.sorted.bam 2>>logs/sort_SRR2584863.log
+        
+[Mon Jun  8 20:33:30 2026]
+Finished jobid: 2 (Rule: samtools_sort)
+6 of 8 steps (75%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Jun  8 20:33:30 2026]
+localrule freebayes:
+    input: ref/ecoli_k12.fa, results/SRR2584863.sorted.bam, results/SRR2584863.sorted.bam.bai
+    output: results/SRR2584863.vcf
+    log: logs/freebayes_SRR2584863.log
+    jobid: 1
+    reason: Missing output files: results/SRR2584863.vcf; Input files updated by another job: results/SRR2584863.sorted.bam, results/SRR2584863.sorted.bam.bai
+    resources: tmpdir=/tmp
+Shell command: freebayes -f ref/ecoli_k12.fa results/SRR2584863.sorted.bam > results/SRR2584863.vcf 2>logs/freebayes_SRR2584863.log
+[Mon Jun  8 20:35:29 2026]
+Finished jobid: 1 (Rule: freebayes)
+7 of 8 steps (88%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Mon Jun  8 20:35:29 2026]
+localrule all:
+    input: results/SRR2584863.vcf, results/fastqc_SRR2584863/SRR2584863_1_fastqc_QC-report.html, results/dag.png
+    jobid: 0
+    reason: Input files updated by another job: results/SRR2584863.vcf
+    resources: tmpdir=/tmp
+Shell command: None
+[Mon Jun  8 20:35:29 2026]
+Finished jobid: 0 (Rule: all)
+8 of 8 steps (100%) done
+Complete log(s): /home/kirill/Desktop/BIOINFA/HW_3/.snakemake/log/2026-06-08T203151.595968.snakemake.log

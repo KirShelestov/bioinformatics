@@ -1,0 +1,25 @@
+=======================================================
+  samtools flagstat — отчёт
+=======================================================
+     3131061  in total
+     3106518  primary
+           0  secondary
+       24543  supplementary
+           0  duplicates
+           0  primary duplicates
+     2939902  mapped  (93.89%)
+     2915359  primary mapped  (93.85%)
+     3106518  paired in sequencing
+     1553259  read1
+     1553259  read2
+     2796762  properly paired  (90.03%)
+     2874714  with itself and mate mapped
+       40645  singletons  (1.31%)
+           0  with mate mapped to a different chr
+=======================================================
+
+  % картированных ридов: 93.89%
+  Порог:                 90.0%
+
+  ✓ Mapping quality: OK
+

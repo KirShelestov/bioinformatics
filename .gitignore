@@ -1,0 +1,20 @@
+# Большие файлы данных — не коммитить (восстанавливаются пайплайном)
+HW_3/data/
+HW_3/ref/
+
+# Промежуточные результаты выравнивания
+HW_3/results/*.sam
+HW_3/results/*.bam
+HW_3/results/*.bam.bai
+
+# Инсталлятор и временные каталоги
+Miniconda3-*.sh
+HW_3/mnt/
+
+# Snakemake служебные файлы
+.snakemake/
+HW_3/hello_world/.snakemake/
+
+# Python
+__pycache__/
+*.pyc
