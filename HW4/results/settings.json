@@ -1,0 +1,32 @@
+{
+  "assembly": "GRCh38",
+  "ensembl_release": 116,
+  "ensembl_rest_release": "15.12",
+  "vep_endpoint": "GET https://rest.ensembl.org/vep/homo_sapiens/region/{chrom}:{pos}-{pos}:1/{alt}",
+  "vep_parameters": {
+    "content-type": "application/json",
+    "hgvs": 1,
+    "canonical": 1,
+    "mane": 1,
+    "numbers": 1,
+    "transcript_version": 1,
+    "variant_class": 1,
+    "af_gnomade": 1,
+    "af_gnomadg": 1,
+    "protein": 1,
+    "tsl": 1,
+    "vcf_string": 1,
+    "distance": 5000
+  },
+  "vep_transcript_set": "Ensembl (default); no transcript filtering",
+  "transcript_selection": "Minimum Ensembl severity rank; ties: MANE Select, canonical, protein_coding, lower TSL, lexical transcript ID",
+  "severity_rank_source": "https://raw.githubusercontent.com/Ensembl/ensembl-variation/release/116/modules/Bio/EnsEMBL/Variation/Utils/Constants.pm",
+  "clinvar_source": "NCBI E-utilities esearch by rsID and by GRCh38 coordinate, esummary",
+  "clinvar_matching": "Individual allele canonical_spdi == GRCh38 accession:POS-1:REF:ALT",
+  "gnomad_source": "https://gnomad.broadinstitute.org/api",
+  "gnomad_dataset": "gnomad_r4",
+  "gnomad_release": "v4 (dataset gnomad_r4); exact patch not returned by queried API",
+  "gnomad_af": "joint.ac/joint.an; exome and genome AF retained separately; no averaging",
+  "missing": "NA; an absent database record is not a zero allele frequency or a benign classification",
+  "input_sha256": "6e2e83e7352d3c40d75a4a157aba7aee6ccf92b570fd541c729f4513ff627f9d"
+}

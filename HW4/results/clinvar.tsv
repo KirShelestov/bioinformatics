@@ -1,0 +1,51 @@
+variant_id	clinvar_present	clinvar_classification	clinvar_accession	clinvar_review_status	clinvar_stars	clinvar_last_evaluated	clinvar_conditions	clinvar_note
+21-25592860-T-C	no	NA	NA	NA	NA	NA	NA	NA
+21-25603910-C-T	no	NA	NA	NA	NA	NA	NA	NA
+21-25603925-C-T	no	NA	NA	NA	NA	NA	NA	ClinVar candidates refer to another allele or a composite variant; classification not transferred
+21-32685836-C-T	yes	Likely benign	VCV000478324.41	criteria provided, multiple submitters, no conflicts	2	2026/02/03 00:00	Developmental and epileptic encephalopathy, 53;Early-onset Parkinson disease 20;Inborn genetic diseases;not provided;not specified	NA
+21-37067340-T-C	yes	Benign	VCV000709521.10	criteria provided, single submitter	1	2026/02/02 00:00	not provided	NA
+21-37072563-T-C	no	NA	NA	NA	NA	NA	NA	ClinVar candidates refer to another allele or a composite variant; classification not transferred
+21-37072581-G-A	yes	Benign	VCV001670166.11	criteria provided, multiple submitters, no conflicts	2	2026/02/03 00:00	not provided	Other alleles excluded; only exact GRCh38 REF>ALT classified
+21-38818481-G-A	no	NA	NA	NA	NA	NA	NA	NA
+21-38821689-C-T	yes	Benign	VCV000783879.5	criteria provided, multiple submitters, no conflicts	2	2019/12/31 00:00	not provided	NA
+21-43968034-C-T	no	NA	NA	NA	NA	NA	NA	NA
+21-43969246-G-A	no	NA	NA	NA	NA	NA	NA	NA
+22-19353405-G-A	yes	Benign	VCV000714835.7	criteria provided, multiple submitters, no conflicts	2	2019/12/31 00:00	not provided	NA
+22-19378003-G-C	no	NA	NA	NA	NA	NA	NA	NA
+22-19383643-G-A	yes	Benign	VCV000777663.6	criteria provided, single submitter	1	2019/12/31 00:00	not provided	NA
+22-19396916-G-A	no	NA	NA	NA	NA	NA	NA	NA
+22-19971306-G-A	yes	Benign	VCV001242019.3	criteria provided, multiple submitters, no conflicts	2	2021/05/04 00:00	not provided	NA
+22-19972976-C-T	yes	Benign	VCV000709199.4	criteria provided, multiple submitters, no conflicts	2	2018/04/04 00:00	not provided	NA
+22-19973143-G-A	yes	Benign	VCV000789863.3	criteria provided, single submitter	1	2018/07/04 00:00	not provided	NA
+22-19981552-A-G	no	NA	NA	NA	NA	NA	NA	ClinVar candidates refer to another allele or a composite variant; classification not transferred
+22-19990695-G-A	yes	Benign	VCV000714837.4	criteria provided, multiple submitters, no conflicts	2	2018/06/25 00:00	not provided	NA
+22-21643905-C-T	no	NA	NA	NA	NA	NA	NA	NA
+22-21643991-G-A	no	NA	NA	NA	NA	NA	NA	NA
+22-21962782-A-G	no	NA	NA	NA	NA	NA	NA	NA
+22-21963972-G-A	yes	no classification provided	VCV004456431.1	no classification provided	0	NA	NA	Evidence-only ClinVar submission; no germline pathogenicity classification
+22-23146672-C-T	no	NA	NA	NA	NA	NA	NA	NA
+22-23160983-A-G	no	NA	NA	NA	NA	NA	NA	NA
+22-24184189-C-G	no	NA	NA	NA	NA	NA	NA	NA
+22-24188053-C-T	yes	Benign	VCV000777671.4	criteria provided, multiple submitters, no conflicts	2	2018/05/21 00:00	not provided	NA
+22-30263994-C-T	no	NA	NA	NA	NA	NA	NA	NA
+22-30461461-A-G	no	NA	NA	NA	NA	NA	NA	ClinVar candidates refer to another allele or a composite variant; classification not transferred
+22-30461658-C-G	no	NA	NA	NA	NA	NA	NA	NA
+22-30468623-A-G	no	NA	NA	NA	NA	NA	NA	NA
+22-30470253-G-A	no	NA	NA	NA	NA	NA	NA	NA
+22-30555239-C-T	no	NA	NA	NA	NA	NA	NA	NA
+22-30556036-G-A	no	NA	NA	NA	NA	NA	NA	NA
+22-30557308-C-T	yes	Benign	VCV001230435.4	criteria provided, multiple submitters, no conflicts	2	2021/02/24 00:00	not provided	NA
+22-31267856-C-G	no	NA	NA	NA	NA	NA	NA	NA
+22-31278313-T-C	no	NA	NA	NA	NA	NA	NA	NA
+22-33304315-G-A	yes	Conflicting classifications of pathogenicity	VCV000095167.59	criteria provided, conflicting classifications	1	2026/01/22 00:00	Muscular dystrophy-dystroglycanopathy (congenital with brain and eye anomalies), type A6;Muscular dystrophy-dystroglycanopathy type B6;not provided;not specified	NA
+22-33650633-G-T	no	NA	NA	NA	NA	NA	NA	NA
+22-38699844-G-C	no	NA	NA	NA	NA	NA	NA	NA
+22-38699982-A-G	no	NA	NA	NA	NA	NA	NA	NA
+22-39231644-T-C	yes	Conflicting classifications of pathogenicity	VCV003305447.2	criteria provided, conflicting classifications	1	2025/12/14 00:00	Inborn genetic diseases;not provided	Other alleles excluded; only exact GRCh38 REF>ALT classified
+22-39231816-T-C	yes	Benign/Likely benign	VCV000725856.33	criteria provided, multiple submitters, no conflicts	2	2026/01/15 00:00	PDGFB-related disorder;not provided	NA
+22-39374495-G-A	no	NA	NA	NA	NA	NA	NA	NA
+22-39765567-C-G	yes	Likely benign	VCV004249262.1	criteria provided, single submitter	1	2025/08/13 00:00	not specified	NA
+22-39861847-C-T	no	NA	NA	NA	NA	NA	NA	NA
+22-40021776-C-T	no	NA	NA	NA	NA	NA	NA	NA
+22-40021816-A-G	no	NA	NA	NA	NA	NA	NA	NA
+22-44916394-G-A	no	NA	NA	NA	NA	NA	NA	NA
